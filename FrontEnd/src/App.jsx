@@ -1,9 +1,10 @@
-import { useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import "./App.css";
 import axios from 'axios'; // ใช้ import แบบใหม่ 
 
 function App() {
   const videoRef = useRef(null);
+  const [countNumber, setCountNumber] = useState(0);
   const startCamera = async () => { 
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ video: true });
@@ -30,27 +31,31 @@ function App() {
       const response = await axios.post('http://127.0.0.1:3001/upload', {
         base64String
       });
-      console.log('API Response:', response.data);
+      console.log('API Response:', response.data.countnumber);
+      setCountNumber(response.data.countnumber);
     } catch (error) {
       console.error('Error sending base64 to API:', error);
     }
   };
   useEffect(() => {
-    startCamera();
-    const captureInterval = setInterval(() => {
-      console.log("starttimer")
-      captureFrame();
-    }, 2000);
-    return () => {
-      clearInterval(captureInterval);
-    };
+    async function fetchData() {
+      await startCamera();
+  
+      const captureInterval = setInterval(() => {
+        console.log("captureFrame")
+        captureFrame();
+      }, 3000);
+  
+      return () => {
+        clearInterval(captureInterval);
+      };
+    }
+    fetchData();
   }, []);
   return (
     <div>
       <video ref={videoRef} autoPlay playsInline></video><br />
-      {/* <button onClick={captureFrame}>
-        Capture and Convert
-      </button> */}
+      <h2>Count Number: {countNumber}</h2>
     </div>
   );
 }

@@ -40,8 +40,6 @@ async function loadModel() {
   // warming up model
   const dummyInput = tfNode.zeros(yolov5.inputs[0].shape);
   const warmupResult = await yolov5.executeAsync(dummyInput);
-  // console.log("dummyInput: ",dummyInput.print())
-  // console.log("warmupResult: ",warmupResult[1].dataSync())
   tfNode.dispose(warmupResult); // cleanup memory
   tfNode.dispose(dummyInput); // cleanup memory
 
@@ -52,22 +50,20 @@ async function loadModel() {
 //load model เมื่อ start server
 loadModel();
 
-app.post("/upload", (req, res) => {
+app.post("/upload", async (req, res) => {
   const { base64String } = req.body; // ดึงค่า base64String จาก req.body
-  // console.log('Base64 data from client:', base64String.length);
 
   if (base64String) {
     const imageBuffer = Buffer.from(base64String, "base64");
-    // const imageData = new Uint8Array(imageBuffer); // แปลงเป็น Uint8Array
-    // const inputImage = tf.browser.fromPixels({ data: imageBuffer, width: modelWidth, height: modelHeight }); // สร้างรูปภาพจาก Uint8Array
     const inputImage = tfNode.node.decodeImage(imageBuffer); 
-    // console.log(inputImage.print())
-    const imageName = "CaptureImage.jpg"; // ชื่อไฟล์ที่ต้องการ
+    const imageName = "CaptureImage.jpg"; 
     fs.writeFileSync(`Image/${imageName}`, imageBuffer);
     console.log("Image saved successfully.");
-      // เรียกใช้ detectImage จาก detect.js เพื่อนับจำนวนวัตถุที่ตรวจพบ
-    detectImage(inputImage, model, classThreshold, imageBuffer);
-    res.send("detected");
+    // เรียกใช้ detectImage จาก detect.js เพื่อนับจำนวนวัตถุที่ตรวจพบ
+    const countnumber = await detectImage(inputImage, model, classThreshold);
+    // console.log("countnumber: ",countnumber);
+    
+    res.status(200).json({ countnumber });
   } else {
     console.error("Invalid base64String.");
     res.status(400).send("Invalid base64String.");
