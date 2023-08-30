@@ -69,7 +69,16 @@ app.post("/upload", async (req, res) => {
     res.status(400).send("Invalid base64String.");
   }
 });
-
+app.get("/get-data", (req, res) => {
+  fs.readFile("data.csv", "utf-8", (err, data) => {
+    if (err) {
+      console.error("Error reading CSV file:", err);
+      res.status(500).json({ error: "Error reading CSV file" });
+    } else {
+      res.send(data);
+    }
+  });
+});
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });

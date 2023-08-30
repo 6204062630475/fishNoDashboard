@@ -48,28 +48,11 @@ function App() {
   }, []);
   useEffect(() => {
     const interval = setInterval(() => {
-      console.log('This will run every second!');
       captureFrame();
     }, 3000);
     return () => clearInterval(interval);
   }, []);
-  // async function fetchData() {
-  //   await startCamera();
-
-  //   const captureInterval = setInterval(() => {
-  //     if (isFetching) {
-  //       console.log("captureFrame");
-  //       captureFrame();
-  //     }
-  //   }, 3000);}
-  // function myStop() {
-  //   clearInterval(captureInterval);
-  // }
-  // useEffect(async () => {
-  //     await startCamera();
-  //     captureInterval()
-
-  // }, []);
+  
   const handleHistoryClick = () => {
     setIsFetching(false); // หยุดการเรียก captureFrame เมื่อคลิกที่ "history"
     // myStop()
@@ -87,7 +70,7 @@ function App() {
         <video ref={videoRef} autoPlay playsInline></video>
         <br />
         <div className="count-container">
-          <h2 className="count-text">Count Number: {countNumber}</h2>
+          <h1 className="count-text">Count Number: {countNumber}</h1>
         </div>
       </div>
     </div>

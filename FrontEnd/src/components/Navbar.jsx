@@ -1,21 +1,44 @@
 import React from "react";
 import { AppBar, Toolbar, Typography, Button } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import "boxicons";
-// Navbar.js
+
 const Navbar = ({ ButtonHome, ButtonHistory }) => {
+  const location = useLocation();
+
+  const isHomeActive = location.pathname === "/";
+  const isHistoryActive = location.pathname === "/history";
+
   return (
-    <AppBar position="static" color="primary">
+    <AppBar position="static" color="primary" style={{ background: '#1B2333' }}>
       <Toolbar>
         <Button variant="h6" color="inherit">
-          {/* <box-icon name='home' color="#eeeeee" ></box-icon> */}
-          <Link to="/" color="white" onClick={ButtonHome}>
+          <Link
+            to="/"
+            style={{
+              color: "white",
+              fontFamily: "Söhne,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif,Helvetica Neue,Arial,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji",
+              fontSize: "16px",
+              textDecoration: "none",
+              fontWeight: isHomeActive ? "bold" : "normal"
+            }}
+            onClick={ButtonHome}
+          >
             App
           </Link>
         </Button>
         <Button variant="h6" color="inherit">
-          {/* <box-icon name='history' color="#eeeeee" ></box-icon> */}
-          <Link to="/history" onClick={ButtonHistory}>
+          <Link
+            to="/history"
+            style={{
+              color: "white",
+              fontFamily: "Söhne,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif,Helvetica Neue,Arial,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji",
+              fontSize: "16px",
+              textDecoration: "none",
+              fontWeight: isHistoryActive ? "bold" : "normal"
+            }}
+            onClick={ButtonHistory}
+          >
             History
           </Link>
         </Button>
@@ -36,4 +59,3 @@ const Navbar = ({ ButtonHome, ButtonHistory }) => {
 };
 
 export default Navbar;
-

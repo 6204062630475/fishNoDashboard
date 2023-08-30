@@ -1,0 +1,20 @@
+.PaperWrapper {
+    display: flex;
+    justify-content: center;
+    
+  }
+  
+  .CenterPaper {
+    width: 40%;
+    padding: 16px;
+    margin: 30px; /* เพิ่มระยะห่างจากขอบด้านข้างมา 50px */
+  }
+  .CenterPaper2 {
+    width: 80%;
+    padding: 16px;
+    margin: 30px; /* เพิ่มระยะห่างจากขอบด้านข้างมา 30px */
+  }
+  
+  .TableContainer {
+    width: 100%;
+  }
