@@ -93,12 +93,12 @@ const Navbar = ({ ButtonHome, ButtonHistory }) => {
           
         </Typography> */}
         <Button style={{ color: "white",textAlign:"center" }}>
-          <box-icon
+          {/* <box-icon
             name="trip-advisor"
             type="logo"
             flip="horizontal"
             color="#ffffff"
-          ></box-icon>
+          ></box-icon> */}
           คู่มือการใช้งาน
         </Button>
       </Toolbar>

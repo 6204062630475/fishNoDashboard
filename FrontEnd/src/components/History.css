@@ -5,15 +5,15 @@
   }
   
   .CenterPaper {
-    width: 40%;
+    width: 68%;
     padding: 16px;
-    margin: 30px; /* เพิ่มระยะห่างจากขอบด้านข้างมา 50px */
+    margin: 20px; /* เพิ่มระยะห่างจากขอบด้านข้างมา 50px */
     animation: fadeIn 1s ease-in-out;
   }
   .CenterPaper2 {
-    width: 80%;
+    width: 68%;
     padding: 16px;
-    margin: 30px; /* เพิ่มระยะห่างจากขอบด้านข้างมา 30px */
+    margin: 20px; /* เพิ่มระยะห่างจากขอบด้านข้างมา 30px */
     animation: fadeIn 1s ease-in-out;
   }
   

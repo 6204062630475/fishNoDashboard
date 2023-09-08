@@ -21,7 +21,7 @@ import "./History.css";
 import moment from "moment";
 import dayjs from "dayjs";
 import isBetween from "dayjs/plugin/isBetween";
-import "boxicons";
+// import "boxicons";
 
 dayjs.extend(isBetween);
 function History() {
@@ -37,14 +37,16 @@ function History() {
       },
     },
   });
-
+  //table Data
   const [csvData, setCsvData] = useState([]);
-  const [chartData, setchartData] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [clonedCsv, setclonedCsv] = useState([]);
+  //Chart Data
+  const [chartData, setchartData] = useState([]);
+  const [backupChart, setBackupChart] = useState([]); //for reset button
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [sameday, setsameday] = useState(false);
   const handleStartDateChange = (event) => {
     console.log("setStartDate: ", event.target.value);
     setStartDate(event.target.value);
@@ -54,100 +56,25 @@ function History() {
     setEndDate(event.target.value);
   };
 
-  // const handleFilter = () => {
-  //   const startDateObj = dayjs(startDate, "YYYY-MM-DD")
-  //     .add(543, "year")
-  //     .format("D/M/YYYY");
-  //   const endDateObj = dayjs(endDate, "YYYY-MM-DD")
-  //     .add(543, "year")
-  //     .format("D/M/YYYY");
-
-  //   const filteredChartData = csvData.filter((row) => {
-  //     const rowDate = dayjs(row.DATETIME, "D/M/YYYY").format("D/M/YYYY");
-  //     // console.log(row.DATETIME);
-  //     // if(rowDate.isBetween(dayjs(startDateObj),dayjs(endDateObj),"hour","[]")){
-  //     //   console.log(rowDate);
-  //     //   console.log(startDateObj, "|", endDateObj);
-  //     // }
-  //     return rowDate >= startDateObj && rowDate <= endDateObj;
-  //     // return rowDate.isBetween(dayjs(startDateObj),dayjs(endDateObj),"day","[]");
-  //   });
-  //   console.log(filteredChartData);
-  //   const reversedate = [...filteredChartData].reverse()
-  //   setchartData(reversedate);
-  // };
-  // const handleFilter = () => {
-  //   const startDateObj = dayjs(startDate, "YYYY-M-D")
-  //     .add(543, "year")
-  //     .format("D/M/YYYY");
-  //   const endDateObj = dayjs(endDate, "YYYY-M-D")
-  //     .add(543, "year")
-  //     .format("D/M/YYYY");
-
-  //   const filteredChartData = csvData.filter((row) => {
-  //     const rowDate = dayjs(row.DATETIME, "D/M/YYYY").format("M/D/YYYY");
-  //     console.log(rowDate);
-  //     console.log(startDateObj, "|", endDateObj);
-  //     return rowDate >= startDateObj && rowDate <= endDateObj;
-  //   });
-  //   // const filteredChartData = csvData
-  //   console.log(filteredChartData);
-  //   // console.log("09/02/2566" >= "31/08/2023");
-  //   setchartData(filteredChartData.reverse());
-  // };
   const handleFilter = () => {
     const startDateObj = dayjs(startDate);
     const endDateObj = dayjs(endDate);
     console.log(startDate, endDate);
     const filteredChartData = csvData.filter((row) => {
       const rowDate = dayjs(row.DATETIME, "D/M/YYYY");
-      // console.log(rowDate);
-      // console.log(startDateObj, "|", endDateObj);
       return dayjs(rowDate).isBetween(startDateObj, endDateObj, "day", "[]");
     });
-    // const filteredChartData = csvData
     console.log(filteredChartData);
-    // console.log("09/02/2566" >= "31/08/2023");
     setchartData(filteredChartData.reverse());
+    setsameday(startDate==endDate)//เช็คว่าเป็นวันเดียวกัน
+    console.log(sameday);
   };
-  // const handleFilter = () => {
-  //   const startDateObj = dayjs(startDate, "YYYY-M-D").add(543, "year")
 
-  //   const endDateObj = dayjs(endDate, "YYYY-M-D").add(543, "year")
-
-  //   const filteredChartData = csvData.filter((row) => {
-  //     const rowDate = dayjs(row.DATETIME, "D/M/YYYY").format("YYYY-M-D");
-  //     console.log(row.DATETIME);
-  //     console.log(startDateObj, "|", endDateObj);
-  //     // console.log(startDate, "|", endDate);
-  //     return dayjs(rowDate).isBetween(startDateObj,endDateObj,"day","[]");
-  //   });
-  //   // const filteredChartData = csvData
-  //   console.log(filteredChartData);
-  //   // console.log("09/02/2566" >= "31/08/2023");
-  //   const reversedate = [...filteredChartData].reverse()
-  //   setchartData(reversedate);
-  // };
-  // const handleFilter = () => {
-  //   const startDateObj = moment(startDate, "YYYY-MM-D")
-  //     .add(543, "year")
-  //     .format("D/M/YYYY");
-  //     const endDateObj = moment(endDate, "YYYY-MM-D")
-  //     .add(543, "year")
-  //     .format("D/M/YYYY");
-
-  //     const filteredChartData = csvData.filter((row) => {
-  //       const rowDate = moment(row.DATETIME, "D/M/YYYY").format("D/M/YYYY");
-  //       console.log(startDateObj, "|", endDateObj);
-  //       console.log(rowDate);
-  //       return rowDate >= startDateObj && rowDate <= endDateObj;
-  //     });
-
-  //   console.log(filteredChartData);
-  //   setchartData(filteredChartData.reverse());
-  // };
   const resetFilter = () => {
-    setchartData(clonedCsv);
+    setchartData(backupChart);
+    setsameday(false)
+    setStartDate("");
+    setEndDate("");
   };
   useEffect(() => {
     console.log("OpenHistory");
@@ -155,12 +82,9 @@ function History() {
     axios.get("http://103.114.203.159:3001/get-data").then((response) => {
       // ตัวอย่างข้อมูล CSV
       const Data = response.data;
-      //   console.log(Data);
       // แปลง CSV เป็นอาร์เรย์
       const lines = Data.trim().split("\n");
-      //   console.log(lines);
       const headers = lines[0].split(",").map((header) => header.trim()); // แก้ไขนี้
-      //   console.log(headers);
       const csvArray = lines.slice(1).map((line) => {
         const values = line.split(",").map((value) => value.trim()); // แก้ไขนี้
         const row = {};
@@ -169,12 +93,35 @@ function History() {
         });
         return row;
       });
-      const clonedCsvArray = [...csvArray]; // Clone csvArray ก่อนที่จะ reverse เพราะหาก reverse แล้วข้างบนจะโดนผลกระทบไปด้วย
-      setclonedCsv(clonedCsvArray);
-      setchartData(clonedCsvArray);
-      setCsvData(csvArray.reverse()); // .reverse() คือเรียงข้อมูลจากล่างขึ้นบน
-      //   console.log(csvData);
-      // console.log(clonedCsvArray);
+      const clonedCsvArray = [...csvArray].reverse(); // Clone csvArray ก่อนที่จะ reverse เพราะหาก reverse แล้วข้างบนจะโดนผลกระทบไปด้วย
+      setCsvData(clonedCsvArray); // .reverse() คือเรียงข้อมูลจากล่างขึ้นบน
+      setBackupChart(csvArray)
+      setchartData(csvArray);
+      // const dailyAverages = {}; // สร้างออบเจ็กต์เพื่อเก็บค่าเฉลี่ยรายวัน
+      
+      // // วนลูปข้อมูล CSV เพื่อคำนวณค่าเฉลี่ยรายวัน
+      // csvArray.forEach((row) => {
+      //   const date = dayjs(row.DATETIME, "D/M/YYYY").format("D/M/YYYY");
+      //   if (!dailyAverages[date]) {
+      //     dailyAverages[date] = { count: 0, total: 0 };
+      //   }
+        
+      //   // ดำเนินการรวมค่าที่ต้องการนับค่าเฉลี่ย
+      //   const valueToAverage = parseFloat(row.FISH); // แทน YOUR_VALUE ด้วยชื่อคอลัมน์ที่คุณต้องการนับค่าเฉลี่ย
+      //   if (!isNaN(valueToAverage)) {
+      //     dailyAverages[date].count++;
+      //     dailyAverages[date].total += valueToAverage;
+      //   }
+      // });
+
+      // // สร้างข้อมูลสำหรับกราฟ
+      // const thisAvgchartData = Object.keys(dailyAverages).map((date) => {
+      //   const average = dailyAverages[date].total / dailyAverages[date].count;
+      //   console.log(average);
+      //   return { DATETIME: date, FISH: average };
+      // });
+      // setAvgchartData(thisAvgchartData) //reset button
+      // setchartData(thisAvgchartData);
     });
   }, []);
   const handleChangePage = (event, newPage) => {
@@ -190,16 +137,16 @@ function History() {
     page * rowsPerPage,
     page * rowsPerPage + rowsPerPage
   );
-    
+
   const showDiv = () => {
-    if(document.getElementById("Chart").style.display=="none") {
-        document.getElementById("Chart").style.display = "flex";
-        document.getElementById("Table").style.display = "none";
+    if (document.getElementById("Chart").style.display == "none") {
+      document.getElementById("Chart").style.display = "flex";
+      document.getElementById("Table").style.display = "none";
     } else {
-        document.getElementById("Chart").style.display = "none";
-        document.getElementById("Table").style.display = "flex";
+      document.getElementById("Chart").style.display = "none";
+      document.getElementById("Table").style.display = "flex";
     }
-}
+  };
 
   return (
     <ThemeProvider theme={darkTheme}>
@@ -208,14 +155,20 @@ function History() {
           <Navbar />
         </div>
         {/* <Button variant="outlined" id="Change" style={{position: "absolute", top: "15px", right: "1%"}}><box-icon name='trip-advisor' type='logo' flip='horizontal' color='#ffffff' ></box-icon>คู่มือการใช้งาน</Button> */}
-        <Button variant="outlined" id="Change" onClick={showDiv} style={{position: "absolute", top: "80px", right: "2%"}}><box-icon name='show' color='#ffffff' ></box-icon></Button>
+        <Button
+          variant="outlined"
+          id="Change"
+          onClick={showDiv}
+          style={{ position: "absolute", top: "80px", right: "2%" }}
+        >
+          เปลี่ยนหน้า
+        </Button>
         {/* <div onClick={showDiv}>
 <svg width="5em" height="5em" viewBox="0 0 24 24">
 <path fill="currentColor" d="M22 22H2v-2h20v2zM10 2H7v16h3V2zm7 6h-3v10h3V8z"></path>
 </svg>
 </div> */}
         <div className="PaperWrapper" id="Chart">
-          
           <Paper
             sx={{ overflow: "hidden", borderRadius: "20px" }}
             className="CenterPaper2"
@@ -225,12 +178,14 @@ function History() {
               <Input
                 type="date"
                 id="startdate"
+                value={startDate}
                 onChange={handleStartDateChange}
                 style={{ marginRight: "8px" }}
               />
               <Input
                 type="date"
                 id="enddate"
+                value={endDate}
                 onChange={handleEndDateChange}
                 style={{ marginRight: "8px" }}
               />
@@ -240,10 +195,10 @@ function History() {
               <Button onClick={resetFilter}>Reset</Button>
             </div>
 
-            <HistoryChart data={chartData} />
+            <HistoryChart data={chartData} sameday = {sameday}/>
           </Paper>
         </div>
-        <div className="PaperWrapper" id="Table" style={{display:"none"}}>
+        <div className="PaperWrapper" id="Table" style={{ display: "none" }}>
           <Paper
             sx={{ overflow: "hidden", borderRadius: "20px" }}
             className="CenterPaper"
@@ -257,15 +212,21 @@ function History() {
               >
                 <TableHead>
                   <TableRow>
-                    <TableCell style={{textAlign:"center"}}>Fish</TableCell>
-                    <TableCell style={{textAlign:"center"}}>Date/Time</TableCell>
+                    <TableCell style={{ textAlign: "center" }}>Fish</TableCell>
+                    <TableCell style={{ textAlign: "center" }}>
+                      Date/Time
+                    </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {slicedData.map((row, index) => (
                     <TableRow key={index}>
-                      <TableCell style={{textAlign:"center"}}>{row.FISH}</TableCell>
-                      <TableCell style={{textAlign:"center"}}>{row.DATETIME}</TableCell>
+                      <TableCell style={{ textAlign: "center" }}>
+                        {row.FISH}
+                      </TableCell>
+                      <TableCell style={{ textAlign: "center" }}>
+                        {row.DATETIME}
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -280,34 +241,7 @@ function History() {
               onRowsPerPageChange={handleChangeRowsPerPage}
             />
           </Paper>
-          {/* <Paper
-            sx={{ overflow: "hidden", borderRadius: "20px" }}
-            className="CenterPaper2"
-          >
-            <h2>Report</h2>
-            <div className="input-container">
-              <Input
-                type="date"
-                id="startdate"
-                onChange={handleStartDateChange}
-                style={{ marginRight: "8px" }}
-              />
-              <Input
-                type="date"
-                id="enddate"
-                onChange={handleEndDateChange}
-                style={{ marginRight: "8px" }}
-              />
-              <Button onClick={handleFilter} color="success">
-                Filter Chart
-              </Button>
-              <Button onClick={resetFilter}>Reset</Button>
-            </div>
-
-            <HistoryChart data={chartData} />
-          </Paper> */}
         </div>
-        
       </div>
     </ThemeProvider>
   );
