@@ -21,22 +21,10 @@ import "./History.css";
 import moment from "moment";
 import dayjs from "dayjs";
 import isBetween from "dayjs/plugin/isBetween";
-// import "boxicons";
+import "boxicons";
 
 dayjs.extend(isBetween);
 function History() {
-  const darkTheme = createTheme({
-    palette: {
-      type: "dark", // ตั้งค่าให้เป็นธีม dark
-      background: {
-        default: "#121212", // สีพื้นหลังเริ่มต้นสำหรับธีม dark
-        paper: "#1E1E1E", // สีพื้นหลังของกระดาษ (เช่น Paper component)
-      },
-      text: {
-        primary: "#FFFFFF", // สีตัวอักษรหลัก
-      },
-    },
-  });
   //table Data
   const [csvData, setCsvData] = useState([]);
   const [page, setPage] = useState(0);
@@ -47,6 +35,8 @@ function History() {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [sameday, setsameday] = useState(false);
+  const [mode, setMode] = useState("chart");
+
   const handleStartDateChange = (event) => {
     console.log("setStartDate: ", event.target.value);
     setStartDate(event.target.value);
@@ -66,13 +56,13 @@ function History() {
     });
     console.log(filteredChartData);
     setchartData(filteredChartData.reverse());
-    setsameday(startDate==endDate)//เช็คว่าเป็นวันเดียวกัน
+    setsameday(startDate == endDate); //เช็คว่าเป็นวันเดียวกัน
     console.log(sameday);
   };
 
   const resetFilter = () => {
     setchartData(backupChart);
-    setsameday(false)
+    setsameday(false);
     setStartDate("");
     setEndDate("");
   };
@@ -95,33 +85,8 @@ function History() {
       });
       const clonedCsvArray = [...csvArray].reverse(); // Clone csvArray ก่อนที่จะ reverse เพราะหาก reverse แล้วข้างบนจะโดนผลกระทบไปด้วย
       setCsvData(clonedCsvArray); // .reverse() คือเรียงข้อมูลจากล่างขึ้นบน
-      setBackupChart(csvArray)
+      setBackupChart(csvArray);
       setchartData(csvArray);
-      // const dailyAverages = {}; // สร้างออบเจ็กต์เพื่อเก็บค่าเฉลี่ยรายวัน
-      
-      // // วนลูปข้อมูล CSV เพื่อคำนวณค่าเฉลี่ยรายวัน
-      // csvArray.forEach((row) => {
-      //   const date = dayjs(row.DATETIME, "D/M/YYYY").format("D/M/YYYY");
-      //   if (!dailyAverages[date]) {
-      //     dailyAverages[date] = { count: 0, total: 0 };
-      //   }
-        
-      //   // ดำเนินการรวมค่าที่ต้องการนับค่าเฉลี่ย
-      //   const valueToAverage = parseFloat(row.FISH); // แทน YOUR_VALUE ด้วยชื่อคอลัมน์ที่คุณต้องการนับค่าเฉลี่ย
-      //   if (!isNaN(valueToAverage)) {
-      //     dailyAverages[date].count++;
-      //     dailyAverages[date].total += valueToAverage;
-      //   }
-      // });
-
-      // // สร้างข้อมูลสำหรับกราฟ
-      // const thisAvgchartData = Object.keys(dailyAverages).map((date) => {
-      //   const average = dailyAverages[date].total / dailyAverages[date].count;
-      //   console.log(average);
-      //   return { DATETIME: date, FISH: average };
-      // });
-      // setAvgchartData(thisAvgchartData) //reset button
-      // setchartData(thisAvgchartData);
     });
   }, []);
   const handleChangePage = (event, newPage) => {
@@ -137,91 +102,97 @@ function History() {
     page * rowsPerPage,
     page * rowsPerPage + rowsPerPage
   );
-
-  const showDiv = () => {
-    if (document.getElementById("Chart").style.display == "none") {
-      document.getElementById("Chart").style.display = "flex";
-      document.getElementById("Table").style.display = "none";
+    //เปลี่ยนMode
+  const handleChangeMode = () => {
+    if (mode === "chart") {
+      setMode("table");
     } else {
-      document.getElementById("Chart").style.display = "none";
-      document.getElementById("Table").style.display = "flex";
+      setMode("chart");
     }
   };
 
   return (
-    <ThemeProvider theme={darkTheme}>
-      <div>
-        <div className="navbar-container">
-          <Navbar />
-        </div>
-        {/* <Button variant="outlined" id="Change" style={{position: "absolute", top: "15px", right: "1%"}}><box-icon name='trip-advisor' type='logo' flip='horizontal' color='#ffffff' ></box-icon>คู่มือการใช้งาน</Button> */}
-        <Button
-          variant="outlined"
-          id="Change"
-          onClick={showDiv}
-          style={{ position: "absolute", top: "80px", right: "2%" }}
-        >
-          เปลี่ยนหน้า
-        </Button>
-        {/* <div onClick={showDiv}>
-<svg width="5em" height="5em" viewBox="0 0 24 24">
-<path fill="currentColor" d="M22 22H2v-2h20v2zM10 2H7v16h3V2zm7 6h-3v10h3V8z"></path>
-</svg>
-</div> */}
+    <>
+      <div className="navbar-container">
+        <Navbar />
+      </div>
+      <Button
+        variant="contained"
+        id="Change"
+        onClick={handleChangeMode}
+        style={{
+          position: "absolute",
+          top: "90px",
+          right: "1%",
+          borderRadius: "20px",
+          backgroundColor: "#00aa9f",
+          "&:hover": {
+            backgroundColor: "#00aa9f", 
+          },
+        }}
+        endIcon= {mode === "chart" ? <box-icon name='table' rotate='270' color='orange'/> : <box-icon name='line-chart' color='orange' />}
+      >
+        {mode === "chart" ? <p style={{fontSize: "16px",fontWeight: "bold", margin:0}}>แสดงตาราง</p> : <p style={{fontSize: "16px",fontWeight: "bold", margin:0}}>แสดงกราฟ</p>}
+      </Button>
+      {mode === "chart" ? (
         <div className="PaperWrapper" id="Chart">
           <Paper
+            elevation={5}
             sx={{ overflow: "hidden", borderRadius: "20px" }}
             className="CenterPaper2"
           >
-            <h2>Report</h2>
+            <h2>กราฟค่าเฉลี่ยรายวัน</h2>
             <div className="input-container">
               <Input
                 type="date"
                 id="startdate"
                 value={startDate}
                 onChange={handleStartDateChange}
-                style={{ marginRight: "8px" }}
               />
               <Input
                 type="date"
                 id="enddate"
                 value={endDate}
                 onChange={handleEndDateChange}
-                style={{ marginRight: "8px" }}
               />
-              <Button onClick={handleFilter} color="success">
-                Filter Chart
+              <Button variant="outlined" onClick={handleFilter} color="success" sx={{borderRadius: "20px"}}>
+                กำหนดวัน
               </Button>
-              <Button onClick={resetFilter}>Reset</Button>
+              <Button variant="outlined" onClick={resetFilter} sx={{borderRadius: "20px"}}>
+                แสดงทั้งหมด
+              </Button>
             </div>
 
-            <HistoryChart data={chartData} sameday = {sameday}/>
+            <HistoryChart data={chartData} sameday={sameday} />
           </Paper>
         </div>
-        <div className="PaperWrapper" id="Table" style={{ display: "none" }}>
+      ) : (
+        <div className="PaperWrapper" id="Table">
           <Paper
             sx={{ overflow: "hidden", borderRadius: "20px" }}
             className="CenterPaper"
           >
-            <h2>History</h2>
-            <TableContainer sx={{ maxHeight: 440 }}>
+            <h2>ตารางประวัติการนับ</h2>
+            <TableContainer sx={{ maxHeight: 600 }}>
               <Table
                 stickyHeader
                 aria-label="sticky table"
                 className="TableContainer"
               >
                 <TableHead>
-                  <TableRow>
-                    <TableCell style={{ textAlign: "center" }}>Fish</TableCell>
-                    <TableCell style={{ textAlign: "center" }}>
-                      Date/Time
+                  <TableRow >
+                    <TableCell style={{ textAlign: "center", width: "45%",fontSize: "16px", fontWeight: "bold"}}>
+                      จำนวน
+                    </TableCell>
+                    <TableCell style={{ textAlign: "center",fontSize: "16px", fontWeight: "bold"}}>
+                      วันเวลาที่นับ
                     </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {slicedData.map((row, index) => (
                     <TableRow key={index}>
-                      <TableCell style={{ textAlign: "center" }}>
+                      <TableCell style={{ textAlign: "center", width: "45%" }}>
                         {row.FISH}
                       </TableCell>
                       <TableCell style={{ textAlign: "center" }}>
@@ -233,6 +204,7 @@ function History() {
               </Table>
             </TableContainer>
             <TablePagination
+              labelRowsPerPage="จำนวนแถว"
               component="div"
               count={csvData.length}
               page={page}
@@ -242,8 +214,8 @@ function History() {
             />
           </Paper>
         </div>
-      </div>
-    </ThemeProvider>
+      )}
+    </>
   );
 }
 

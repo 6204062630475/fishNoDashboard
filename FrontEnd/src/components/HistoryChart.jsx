@@ -61,7 +61,6 @@ const LineChart = ({ data, sameday}) => {
     console.log(average);
     return { DATETIME: date, FISH: average };
   });
-  // console.log(data.length>40)
   // แยกข้อมูล x (วันที่และเวลา) และ y (ค่าที่เกี่ยวข้อง) ออกจาก Object
   const xData1 = data.map((item) => item.DATETIME);
   console.log(xData1);
@@ -77,7 +76,8 @@ const LineChart = ({ data, sameday}) => {
   //   xData = xData1
   //   yData = yData1
   // }
-  if(sameday){
+  if(sameday)//เงื่อนไขว่าถ้าเป็นวันเดียวกัน
+  { 
     xData = Array.from({ length: 24 }, (_, index) => index.toString().padStart(2, '0') + ':00น.');
     yData = yData3
   }
@@ -86,12 +86,12 @@ const LineChart = ({ data, sameday}) => {
     labels: xData,
     datasets: [
       {
-        label: "Fish",
+        label: "จำนวนปลาหางนกยูงเฉลี่ย",
         data: yData,
         borderColor: "rgba(75,192,192,1)",
         backgroundColor: "rgba(75,192,192,0.2)",
       },
-      // {
+      // { //เส้นที่สอง
       //   label: "Avg Fish",
       //   data: yData2,
       //   borderColor: "rgba(192,75,192,1)",

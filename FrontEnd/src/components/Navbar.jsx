@@ -1,9 +1,18 @@
 import React from "react";
-import { AppBar, Toolbar, Typography, Button, colors } from "@mui/material";
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+  colors,
+  Avatar,
+} from "@mui/material";
 import { Link, useLocation } from "react-router-dom";
 import "boxicons";
 import "./History.css";
 import guppyImage from "../assets/logofish.jpg";
+import Dialog from "./Dialog";
+
 const Navbar = ({ ButtonHome, ButtonHistory }) => {
   const location = useLocation();
 
@@ -11,96 +20,92 @@ const Navbar = ({ ButtonHome, ButtonHistory }) => {
   const isHistoryActive = location.pathname === "/history";
 
   return (
-    <AppBar position="static" color="primary" style={{ background: "#000000" }}>
+    <AppBar position="static" color="primary" style={{ background: "white" }}>
       {/* <AppBar position="static" color="primary" style={{ background: '#1B2333' }}> */}
       <Toolbar>
-      <img
-            src={guppyImage}
-            alt="Counting Guppy"
-            style={{
-              verticalAlign: "middle",
-              marginRight: "50px",
-              width: "60px",
-              height: "60px",
-            }}
-          />
-          <div style={{textAlign:"center",marginLeft:"auto",marginRight:"auto"}}>
-        <Button
-          variant="h6"
-          color="inherit"
+        <img
+          src={guppyImage}
+          alt="Counting Guppy"
           style={{
-            border: isHomeActive ? "2px solid rgb(102, 178, 255)" : "Black",
+            verticalAlign: "middle",
+            width: "auto",
+            height: "70px",
           }}
-        >
-          <Link
-            className="navbar-link"
-            to="/"
-            style={{
-              color: isHomeActive ? "rgb(102, 178, 255)" : "white",
-              // borderBottom: isHomeActive? "2px solid rgb(102, 178, 255)":"Black",
-              fontFamily:
-                "Söhne,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif,Helvetica Neue,Arial,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji",
-              fontSize: "16px",
-              textDecoration: "none",
-              // fontWeight: isHomeActive ? "bold" : "normal"
-              fontWeight: "bold",
-              transition: "color 0.3s ease, border-bottom 0.3s ease",
-            }}
-            onClick={ButtonHome}
-          >
-            App
-          </Link>
-        </Button>
-        <Button
-          variant="h6"
-          color="inherit"
+        />
+        <div
           style={{
-            border: isHistoryActive ? "2px solid rgb(102, 178, 255)" : "Black",
-          }}
-        >
-          <Link
-            className="navbar-link"
-            to="/history"
-            style={{
-              color: isHistoryActive ? "rgb(102, 178, 255)" : "white",
-              // borderBottom: isHistoryActive? "2px solid rgb(102, 178, 255)":"Black",
-              fontFamily:
-                "Söhne,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif,Helvetica Neue,Arial,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji",
-              fontSize: "16px",
-              textDecoration: "none",
-              // fontWeight: isHistoryActive ? "bold" : "normal"
-              fontWeight: "bold",
-              transition: "color 0.3s ease, border-bottom 0.3s ease",
-            }}
-            onClick={ButtonHistory}
-          >
-            History
-          </Link>
-        </Button>
-        </div>
-        {/* <Typography
-          variant="h6"
-          style={{
-            flexGrow: 1,
             textAlign: "center",
-            marginLeft: "-2.5%",
-            fontFamily: "Times New Roman, Times, serif",
-            // color: "var(--muidocs-palette-grey-50, #F3F6F9)"
-            color: "RGB(22, 126, 198)",
+            marginLeft: "auto",
+            marginRight: "auto",
           }}
         >
-          Counting Guppy
-          
-        </Typography> */}
-        <Button style={{ color: "white",textAlign:"center" }}>
-          {/* <box-icon
-            name="trip-advisor"
-            type="logo"
-            flip="horizontal"
-            color="#ffffff"
-          ></box-icon> */}
-          คู่มือการใช้งาน
-        </Button>
+          <Button
+            variant="h6"
+            color="inherit"
+            style={{
+              border: isHomeActive ? "2px solid #00aa9f" : "Black",
+              borderRadius: "20px",
+            }}
+          >
+            <Link
+              className="navbar-link"
+              to="/"
+              style={{
+                color: isHomeActive ? "#00aa9f" : "Black",
+                // borderBottom: isHomeActive? "2px solid rgb(102, 178, 255)":"Black",
+                fontFamily:
+                  "Söhne,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif,Helvetica Neue,Arial,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji",
+                fontSize: "16px",
+                textDecoration: "none",
+                // fontWeight: isHomeActive ? "bold" : "normal"
+                fontWeight: "bold",
+                transition: "color 0.3s ease, border-bottom 0.3s ease",
+              }}
+              onClick={ButtonHome}
+            >
+              หน้าแรก
+            </Link>
+          </Button>
+          <Button
+            variant="h6"
+            color="inherit"
+            style={{
+              border: isHistoryActive ? "2px solid #00aa9f" : "Black",
+              borderRadius: "20px",
+            }}
+          >
+            <Link
+              className="navbar-link"
+              to="/history"
+              style={{
+                color: isHistoryActive ? "#00aa9f" : "Black",
+                // borderBottom: isHistoryActive? "2px solid rgb(102, 178, 255)":"Black",
+                fontFamily:
+                  "Söhne,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif,Helvetica Neue,Arial,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji",
+                fontSize: "16px",
+                textDecoration: "none",
+                // fontWeight: isHistoryActive ? "bold" : "normal"
+                fontWeight: "bold",
+                transition: "color 0.3s ease, border-bottom 0.3s ease",
+              }}
+              onClick={ButtonHistory}
+            >
+              ประวัติการนับ
+            </Link>
+          </Button>
+        </div>
+
+        {/* <Button
+          style={{ color: "black", textAlign: "center", marginLeft:"5%"}}
+          sx={{ borderRadius: "20px" }}
+          href="readme.pdf" target="_blank"
+        > 
+          <box-icon name='download' type='solid' color='#00aa9f' />
+          <p style={{ fontSize: "15.5px", fontWeight: "bold", color: "#5A5A5A" }}>
+            คู่มือการใช้งาน
+          </p>
+        </Button> */}
+        <Dialog/>
       </Toolbar>
     </AppBar>
   );

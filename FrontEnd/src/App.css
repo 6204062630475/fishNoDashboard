@@ -13,43 +13,28 @@
   padding: 1em;
 }
 .count-container {
-  background-color: rgba(0, 58, 117, 0.2);
+  background-color: whitesmoke;
+  /* background-color: rgba(0, 58, 117, 0.2); */
   /* border: 1px solid #ccc; */
-  border-radius: 8px;
+  border-radius: 50px;
   padding: 10px;
   text-align: center;
   margin-top: 20px;
-  width: 32%;
-  margin-left: 33.5%;
+  width: 42%;
+  height: 80%;
+  margin-left: 28.2%;
   animation: fadeIn 1s ease-in-out;
 }
 
 .count-text {
   /* color: var(--muidocs-palette-grey-50, #F3F6F9); */
-  color: white;
-  margin: 0;
+  color: black;
+  margin: 1rem;
 }
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+h1 {
+  font-size: 2.5em; /* ตัวอย่างการกำหนดขนาดเป็น 2 เท่าของขนาดปรกติ */
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
 @keyframes fadeIn {
   0% {
     opacity: 0;
@@ -65,4 +50,16 @@
 
 .read-the-docs {
   color: #888;
+}
+.PaperWrapper {
+  display: flex;
+  justify-content: center;
+  
+}
+
+.CenterPaper {
+  width: 80%;
+  padding: 16px;
+  margin: 20px; /* เพิ่มระยะห่างจากขอบด้านข้างมา 50px */
+  animation: fadeIn 1s ease-in-out;
 }

@@ -2,22 +2,8 @@ import { useState, useEffect, useRef } from "react";
 import "./App.css";
 import axios from "axios"; // ใช้ import แบบใหม่
 import Navbar from "./components/Navbar";
-import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { Paper } from "@mui/material";
 function App() {
-
-  const darkTheme = createTheme({
-    palette: {
-      type: 'dark', // ตั้งค่าให้เป็นธีม dark
-      background: {
-        default: '#121212', // สีพื้นหลังเริ่มต้นสำหรับธีม dark
-        paper: '#1E1E1E',   // สีพื้นหลังของกระดาษ (เช่น Paper component)
-      },
-      text: {
-        primary: '#FFFFFF', // สีตัวอักษรหลัก
-      },
-    },
-  });
-
   const videoRef = useRef(null);
   const [countNumber, setCountNumber] = useState(0);
   const [isFetching, setIsFetching] = useState(true);
@@ -26,7 +12,7 @@ function App() {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ video: true });
       videoRef.current.srcObject = stream;
-      console.log("started camera")
+      console.log("started camera");
     } catch (error) {
       console.error("Error accessing webcam:", error);
     }
@@ -66,7 +52,7 @@ function App() {
     }, 5000);
     return () => clearInterval(interval);
   }, []);
-  
+
   const handleHistoryClick = () => {
     setIsFetching(false); // หยุดการเรียก captureFrame เมื่อคลิกที่ "history"
     // myStop()
@@ -76,20 +62,29 @@ function App() {
     setIsFetching(true); // เริ่มการเรียก captureFrame เมื่อกลับมาที่ "home"
   };
   return (
-    <ThemeProvider theme={darkTheme}>
-    <div className="App">
+    <>
       <div className="navbar-container">
-        <Navbar ButtonHome={handleHomeClick} ButtonHistory={handleHistoryClick} />
+        <Navbar
+          ButtonHome={handleHomeClick}
+          ButtonHistory={handleHistoryClick}
+        />
       </div>
-      <div className="video-container">
-        <video ref={videoRef} autoPlay playsInline></video>
-        <br />
-        <div className="count-container">
-          <h1 className="count-text">Count Number: {countNumber}</h1>
-        </div>
+      <div className="PaperWrapper">
+        <Paper
+        elevation={5}
+          sx={{ overflow: "hidden", borderRadius: "20px" }}
+          className="CenterPaper"
+        >
+          <div className="video-container">
+            <video ref={videoRef} autoPlay playsInline></video>
+            <br />
+            <div className="count-container">
+              <h1 className="count-text">จำนวน: {countNumber} ตัว</h1>
+            </div>
+          </div>
+        </Paper>
       </div>
-    </div>
-    </ThemeProvider>
+    </>
   );
 }
 
