@@ -2,6 +2,7 @@ import * as tf from "@tensorflow/tfjs-node";
 import fs from "fs";
 import gm from "gm";
 import { EuclideanDistTracker } from "./tracker.js";
+import dayjs from "dayjs";
 
 const imagePath = "./Image/CaptureImage.jpg";
 let tracker = new EuclideanDistTracker();
@@ -76,12 +77,12 @@ export const detectImage = async (imgSource, model, classThreshold) => {
   countnumber = num_data[0];
   const savedata = (num_data) => {
     if (num_data > 0) {
-      const now = new Date();
-      const dateTime = now.toLocaleString();
+      const now = dayjs();
+      const dateTime = now.format('YYYY-M-D HH:mm:ss');;
       // สร้างข้อมูล CSV ที่มีคอลัมน์ใหม่
       const data = `${num_data},${dateTime}\n`; // ใช้เครื่องหมาย , เพื่อแยกคอลัมน์
       // บันทึกข้อมูลลงในไฟล์ CSV
-      fs.appendFile("data.csv", data, (err) => {
+      fs.appendFile("testData.csv", data, (err) => {
         if (err) {
           console.error("เกิดข้อผิดพลาดในการบันทึกไฟล์ CSV:", err);
         } else {

@@ -17,12 +17,21 @@ const model = {
 };
 const classThreshold = 0;
 const [modelWidth, modelHeight] = model.inputShape.slice(1, 3);
+
+app.use(function(req, res, next) {
+  res.setHeader('Access-Control-Allow-Origin', '*'); //หรือใส่แค่เฉพาะ domain ที่ต้องการได้
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  next();
+});
+// app.use(express.json({ extended: false }));
 // cors เพื่ออนุญาติการเข้าถึงapi
 app.use(cors());
-const corsOptions = {
-  origin: "http://localhost:5173",
-};
-app.use(cors(corsOptions));
+// const corsOptions = {
+//   origin: "http://localhost:5173",
+// };
+// app.use(cors(corsOptions));
 app.use(bodyParser.json({ limit: "10mb" }));
 
 // Middleware เพื่อให้ Express เข้าถึงไฟล์ในโฟลเดอร์ public
@@ -70,7 +79,7 @@ app.post("/upload", async (req, res) => {
   }
 });
 app.get("/get-data", (req, res) => {
-  fs.readFile("data.csv", "utf-8", (err, data) => {
+  fs.readFile("testData.csv", "utf-8", (err, data) => {
     if (err) {
       console.error("Error reading CSV file:", err);
       res.status(500).json({ error: "Error reading CSV file" });
