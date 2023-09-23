@@ -19,8 +19,11 @@ export default function AlertDialog() {
 
   return (
     <div>
-      <Button variant="contained" onClick={handleClickOpen} sx={{borderRadius: "20px"}}>
-        คู่มือการใช้งาน
+      <Button variant="contained" onClick={handleClickOpen} sx={{borderRadius: "20px",backgroundColor: "#00aa9f",
+          "&:hover": {
+            backgroundColor: "#00aa9f", 
+          },}}>
+        คำแนะนำการใช้งาน
       </Button>
       <Dialog
         open={open}
@@ -35,8 +38,6 @@ export default function AlertDialog() {
         <DialogContent dividers>
           <DialogContentText id="alert-dialog-description">
            <img src="./guide/guide.jpg" alt="guild" width={'100%'}/>
-           {/* <img src="guide1.jpg" alt="guild" width={'100%'}/> */}
-           {/* <img src="./guide/guide2.jpg" alt="guild" width={'100%'}/> */}
           </DialogContentText>
         </DialogContent>
         <DialogActions>

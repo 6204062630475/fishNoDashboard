@@ -22,7 +22,8 @@ import moment from "moment";
 import dayjs from "dayjs";
 import isBetween from "dayjs/plugin/isBetween";
 import "boxicons";
-
+import Dialog from "./DialogGuide";
+import DialogHelp from "./DialogContact";
 dayjs.extend(isBetween);
 function History() {
   //table Data
@@ -116,6 +117,10 @@ function History() {
       <div className="navbar-container">
         <Navbar />
       </div>
+      <div style={{position:"absolute",top: "86%",right: "1%",}}>
+        <Dialog />
+      </div>
+      
       <Button
         variant="contained"
         id="Change"
@@ -130,9 +135,10 @@ function History() {
             backgroundColor: "#00aa9f", 
           },
         }}
-        endIcon= {mode === "chart" ? <box-icon name='table' rotate='270' color='orange'/> : <box-icon name='line-chart' color='orange' />}
+        startIcon={<box-icon name='chevron-left' color='white' />}
+        endIcon= {mode === "chart" ? <box-icon name='table' rotate='270' color='white'/> : <box-icon name='line-chart' color='white' />}
       >
-        {mode === "chart" ? <p style={{fontSize: "16px",fontWeight: "bold", margin:0}}>แสดงตาราง</p> : <p style={{fontSize: "16px",fontWeight: "bold", margin:0}}>แสดงกราฟ</p>}
+        {mode === "chart" ? <p style={{fontSize: "16px",fontWeight: "400", margin:0}}>แสดงตาราง</p> : <p style={{fontSize: "16px",fontWeight: "400", margin:0}}>แสดงกราฟ</p>}
       </Button>
       {mode === "chart" ? (
         <div className="PaperWrapper" id="Chart">
@@ -215,6 +221,9 @@ function History() {
           </Paper>
         </div>
       )}
+      <div style={{position:"absolute",top: "92%",right: "1%"}}>
+        <DialogHelp/>
+      </div>
     </>
   );
 }

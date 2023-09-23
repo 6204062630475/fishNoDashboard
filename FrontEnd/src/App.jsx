@@ -3,6 +3,9 @@ import "./App.css";
 import axios from "axios"; // ใช้ import แบบใหม่
 import Navbar from "./components/Navbar";
 import { Paper } from "@mui/material";
+import DialogContact from "./components/DialogContact";
+import DialogDetected from "./components/DialogDetected"
+
 function App() {
   const videoRef = useRef(null);
   const [countNumber, setCountNumber] = useState(0);
@@ -28,7 +31,7 @@ function App() {
     const base64String = canvas
       .toDataURL("image/jpeg")
       .replace("data:image/jpeg;base64,", "");
-    console.log("Request to API: ", base64String);
+    // console.log("Request to API: ", base64String);
 
     try {
       const response = await axios.post("http://103.114.203.159:3001/upload", {
@@ -73,8 +76,9 @@ function App() {
         <Paper
         elevation={5}
           sx={{ overflow: "hidden", borderRadius: "20px" }}
-          className="CenterPaper"
+          className="CenterPaperApp"
         >
+          {/* <p><h2>ภาพจากกล้อง</h2></p> */}
           <div className="video-container">
             <video ref={videoRef} autoPlay playsInline></video>
             <br />
@@ -84,6 +88,14 @@ function App() {
           </div>
         </Paper>
       </div>
+      <div style={{position:"absolute",top: "86%",right: "1%"}}>
+        <DialogDetected/>
+      </div>
+      <div style={{position:"absolute",top: "92%",right: "1%"}}>
+        <DialogContact/>
+      </div>
+
+      
     </>
   );
 }

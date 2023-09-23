@@ -5,6 +5,7 @@ import fs from "fs";
 import * as tfNode from "@tensorflow/tfjs-node";
 import path from "path"; // เพิ่ม path module
 import { detectImage } from "./detect.js";
+import { log } from "console";
 
 
 const app = express();
@@ -79,15 +80,22 @@ app.post("/upload", async (req, res) => {
   }
 });
 app.get("/get-data", (req, res) => {
-  fs.readFile("testData.csv", "utf-8", (err, data) => {
+  fs.readFile("data.csv", "utf-8", (err, data) => {
     if (err) {
       console.error("Error reading CSV file:", err);
       res.status(500).json({ error: "Error reading CSV file" });
     } else {
+      log("GetData")
       res.send(data);
     }
   });
 });
+app.get("/get-img", (req,res) =>{
+  const imagePath = path.join(__dirname,"Image","CaptureImageWithBoxes.jpg")
+  const imageBuffer = fs.readFileSync(imagePath)
+  const base64String = imageBuffer.toString('base64')
+  res.send(base64String) 
+})
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
