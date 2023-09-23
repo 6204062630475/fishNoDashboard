@@ -135,7 +135,7 @@ function History() {
             backgroundColor: "#00aa9f", 
           },
         }}
-        startIcon={<box-icon name='chevron-left' color='white' />}
+        startIcon={<box-icon name='chevron-left' type='solid' color='#ffffff' ></box-icon>}
         endIcon= {mode === "chart" ? <box-icon name='table' rotate='270' color='white'/> : <box-icon name='line-chart' color='white' />}
       >
         {mode === "chart" ? <p style={{fontSize: "16px",fontWeight: "400", margin:0}}>แสดงตาราง</p> : <p style={{fontSize: "16px",fontWeight: "400", margin:0}}>แสดงกราฟ</p>}
