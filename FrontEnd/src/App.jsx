@@ -4,9 +4,13 @@ import axios from "axios"; // ใช้ import แบบใหม่
 import Navbar from "./components/Navbar";
 import { Paper } from "@mui/material";
 import DialogContact from "./components/DialogContact";
-import DialogDetected from "./components/DialogDetected"
-
+import DialogDetected from "./components/DialogDetected";
+import dayjs from "dayjs";
+import "boxicons";
 function App() {
+  const [currentDateTime, setCurrentDateTime] = useState(
+    dayjs().format("YYYY-MM-DD HH:mm:ss")
+  );
   const videoRef = useRef(null);
   const [countNumber, setCountNumber] = useState(0);
   const [isFetching, setIsFetching] = useState(true);
@@ -55,6 +59,13 @@ function App() {
     }, 5000);
     return () => clearInterval(interval);
   }, []);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentDateTime(dayjs().format("YYYY-MM-DD HH:mm:ss"));
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   const handleHistoryClick = () => {
     setIsFetching(false); // หยุดการเรียก captureFrame เมื่อคลิกที่ "history"
@@ -74,11 +85,20 @@ function App() {
       </div>
       <div className="PaperWrapper">
         <Paper
-        elevation={5}
+          elevation={5}
           sx={{ overflow: "hidden", borderRadius: "20px" }}
           className="CenterPaperApp"
         >
           {/* <p><h2>ภาพจากกล้อง</h2></p> */}
+          <h2 style={{ color: "black", display: "flex",justifyContent:"center" }}>
+            <box-icon
+              name="calendar"
+              type="solid"
+              color="gray"
+              style={{ marginRight: "8px" }}
+            />
+            <span style={{ color: "gray" }}>{currentDateTime}</span>
+          </h2>
           <div className="video-container">
             <video ref={videoRef} autoPlay playsInline></video>
             <br />
@@ -88,14 +108,12 @@ function App() {
           </div>
         </Paper>
       </div>
-      <div style={{position:"absolute",top: "86%",right: "1%"}}>
-        <DialogDetected/>
+      <div style={{ position: "absolute", top: "86%", right: "1%" }}>
+        <DialogDetected />
       </div>
-      <div style={{position:"absolute",top: "92%",right: "1%"}}>
-        <DialogContact/>
+      <div style={{ position: "absolute", top: "92%", right: "1%" }}>
+        <DialogContact />
       </div>
-
-      
     </>
   );
 }

@@ -59,7 +59,7 @@ h1 {
 }
 
 .CenterPaperApp {
-  width: 80%;
+  width: 68%;
   padding: 16px;
   margin: 20px; /* เพิ่มระยะห่างจากขอบด้านข้างมา 50px */
   animation: fadeIn 1s ease-in-out;
